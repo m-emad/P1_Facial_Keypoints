@@ -21,22 +21,22 @@ class Net(nn.Module):
         # 1 input image channel (grayscale), 32 output channels/feature maps, 5x5 square convolution kernel
         
         self.conv1 = nn.Conv2d(1, 32, 5)         # 224 - 5 + 1 = 220
+        self.conv1_bn = nn.BatchNorm2d(32)
         self.pool1 = nn.MaxPool2d(2)            # (110, 110)
-        self.pool1_drop = nn.Dropout(0.2)
 
         self.conv2 = nn.Conv2d(32, 64, 3)      # 110 - 3 + 1 = 108
+        self.conv2_bn = nn.BatchNorm2d(64)
         self.pool2 = nn.MaxPool2d(2)           # (54, 54)
-        self.pool2_drop = nn.Dropout(0.2)
 
         self.conv3 = nn.Conv2d(64, 128, 3)     # 54 - 3 + 1 = 52
+        self.conv3_bn = nn.BatchNorm2d(128)
         self.pool3 = nn.MaxPool2d(2)           # (26, 26)
-        self.pool3_drop = nn.Dropout(0.2)
 
         self.fc1 = nn.Linear(128 * 26 * 26, 1000)
-        self.fc1_drop = nn.Dropout(0.4)
-        self.fc2 = nn.Linear(1000, 500)
-        self.fc2_drop = nn.Dropout(0.4)
-        self.fc3 = nn.Linear(500, 136)
+        self.fc1_drop = nn.Dropout(0.5)
+        self.fc2 = nn.Linear(1000, 1000)
+        self.fc2_drop = nn.Dropout(0.5)
+        self.fc3 = nn.Linear(1000, 136)
         
 
         
@@ -44,12 +44,9 @@ class Net(nn.Module):
         ## Define the feedforward behavior of this model
         ## x is the input image and, as an example, here you may choose to include a pool/conv step:
        
-        x = self.pool1((F.relu(self.conv1(x))))
-        x = self.pool1_drop(x)
-        x = self.pool2((F.relu(self.conv2(x))))
-        x = self.pool2_drop(x)
-        x = self.pool3((F.relu(self.conv3(x))))
-        x = self.pool3_drop(x)
+        x = self.pool1((F.relu(self.conv1_bn(self.conv1(x)))))
+        x = self.pool2((F.relu(self.conv2_bn(self.conv2(x)))))
+        x = self.pool3((F.relu(self.conv3_bn(self.conv3(x)))))
 
         x = x.view(x.size(0), -1)
 
