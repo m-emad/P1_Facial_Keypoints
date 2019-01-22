@@ -31,8 +31,13 @@ class Net(nn.Module):
         self.conv3 = nn.Conv2d(64, 128, 3)     # 54 - 3 + 1 = 52
         self.conv3_bn = nn.BatchNorm2d(128)
         self.pool3 = nn.MaxPool2d(2)           # (26, 26)
-
-        self.fc1 = nn.Linear(128 * 26 * 26, 1000)
+        
+        
+        self.conv4 = nn.Conv2d(128, 256, 3)     # 26 - 3 + 1 = 24
+        self.conv4_bn = nn.BatchNorm2d(256)
+        self.pool4 = nn.MaxPool2d(2)           # (12, 12)
+        
+        self.fc1 = nn.Linear(256 * 12 * 12, 1000)
         self.fc1_drop = nn.Dropout(0.5)
         self.fc2 = nn.Linear(1000, 1000)
         self.fc2_drop = nn.Dropout(0.5)
@@ -47,6 +52,7 @@ class Net(nn.Module):
         x = self.pool1((F.relu(self.conv1_bn(self.conv1(x)))))
         x = self.pool2((F.relu(self.conv2_bn(self.conv2(x)))))
         x = self.pool3((F.relu(self.conv3_bn(self.conv3(x)))))
+        x = self.pool4((F.relu(self.conv4_bn(self.conv4(x)))))
 
         x = x.view(x.size(0), -1)
 
