@@ -18,9 +18,9 @@ class Net(nn.Module):
         ## it's suggested that you make this last layer output 136 values, 2 for each of the 68 keypoint (x, y) pairs
         
         # As an example, you've been given a convolutional layer, which you may (but don't have to) change:
-        # 1 input image channel (grayscale), 32 output channels/feature maps, 3x3 square convolution kernel
+        # 1 input image channel (grayscale), 32 output channels/feature maps, 5x5 square convolution kernel
         
-        self.conv1 = nn.Conv2d(1, 32, 3)         # 224 - 5 + 1 = 220
+        self.conv1 = nn.Conv2d(1, 32, 5)         # 224 - 5 + 1 = 220
         self.conv1_bn = nn.BatchNorm2d(32)
         self.pool = nn.MaxPool2d(2)            # (110, 110)
 
